@@ -1,5 +1,3 @@
-const { run } = require('jest');
-
 module.exports = {
 	// Entorno de pruebas (Node.js para una API)
 	testEnvironment: 'node',
@@ -8,13 +6,13 @@ module.exports = {
 	testTimeout: 10000,
 
 	// Archivos de setup que se ejecutan después de configurar el entorno
-	setupFilesAfterEnv: ['./src/tests/setup.js'],
+	setupFilesAfterEnv: ['./backend/src/tests/setup.js'],
 
 	// Ignorar la carpeta node_modules
 	testPathIgnorePatterns: ['/node_modules/'],
 
 	// Patrones para encontrar archivos de prueba
-	testMatch: ['**/tests/**/*.test.js'],
+	testMatch: ['<rootDir>/backend/src/tests/**/*.test.js'],
 
 	// Extensiones de archivos que Jest debe reconocer
 	moduleFileExtensions: ['js', 'json'],
@@ -34,8 +32,9 @@ module.exports = {
 	coverageProvider: 'v8',
 	coveragePathIgnorePatterns: [
 		'/node_modules/',
-		'/src/tests/setup.js',
-		'/src/config/'
+		'/backend/src/tests/setup.js',
+		'/backend/src/config/',
+		'/frontend/'
 	],
 
 	// Umbral mínimo de cobertura (opcional, ajusta según tus necesidades)

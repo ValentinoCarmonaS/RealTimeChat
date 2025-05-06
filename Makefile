@@ -23,7 +23,7 @@ test: ## Runs the tests. (with Docker)
 	NODE_ENV=test $(DOCKER_COMPOSE) run --rm \
 		-v "$(PWD)/coverage:/usr/src/app/coverage" \
 		-e NODE_ENV=test \
-		api npm test
+		chat-api npm test
 
 format: ## Formats the code using Prettier.
 	@echo "Formatting code..."

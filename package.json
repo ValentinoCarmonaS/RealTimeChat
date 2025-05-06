@@ -1,28 +1,30 @@
 {
-	"name": "api-crud",
+	"name": "realtime-chat",
 	"version": "1.0.0",
-	"description": "### Introducción",
-	"main": "app.js",
+	"description": "A real-time chat application using WebSockets and MongoDB.",
+	"main": "backend/src/app.js",
 	"directories": {
-		"test": "test"
+		"test": "backend/src/tests"
 	},
 	"scripts": {
-		"start": "NODE_ENV=production node src/app.js",
-		"dev": "NODE_ENV=development nodemon --exec \"make format && node\" src/app.js",
+		"start": "NODE_ENV=production node backend/src/app.js",
+		"dev": "NODE_ENV=development nodemon backend/src/app.js",
 		"test": "NODE_ENV=test jest --verbose --silent --detectOpenHandles",
 		"format": "prettier --write '**/*.{js,json,md}'"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/ValentinoCarmonaS/API-CRUD.git"
+		"url": "git+https://github.com/ValentinoCarmonaS/RealTimeChat.git"
 	},
 	"keywords": [
-		"api",
-		"rest",
-		"crud",
+		"chat",
+		"realtime",
+		"websockets",
+		"socket.io",
 		"nodejs",
 		"express",
 		"mvc",
+		"mongodb",
 		"backend",
 		"javascript",
 		"docker",
@@ -30,15 +32,14 @@
 		"jest",
 		"supertest",
 		"modular",
-		"scalable",
-		"freelance"
+		"scalable"
 	],
 	"author": "Valentino Carmona",
-	"license": "ISC",
+	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/ValentinoCarmonaS/API-CRUD/issues"
+		"url": "https://github.com/ValentinoCarmonaS/RealTimeChat/issues"
 	},
-	"homepage": "https://github.com/ValentinoCarmonaS/API-CRUD#readme",
+	"homepage": "https://github.com/ValentinoCarmonaS/RealTimeChat#readme",
 	"devDependencies": {
 		"jest": "^29.7.0",
 		"nodemon": "^3.1.9",
@@ -47,12 +48,12 @@
 	},
 	"dependencies": {
 		"bcrypt": "^5.1.1",
-		"cors": "^2.8.5",
 		"dotenv": "^16.4.7",
 		"express": "^5.1.0",
 		"express-validator": "^7.2.1",
 		"jsonwebtoken": "^9.0.2",
-		"mongoose": "^8.13.2"
+		"mongoose": "^8.13.2",
+		"socket.io": "^4.8.1"
 	},
 	"prettier": {
 		"semi": true,

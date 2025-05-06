@@ -13,3 +13,5 @@ dist/ build/
 # Ignorar archivos de configuración generados
 
 package-lock.json
+
+*.min.js
