@@ -1,0 +1,71 @@
+{
+	"name": "api-crud",
+	"version": "1.0.0",
+	"description": "### Introducción",
+	"main": "app.js",
+	"directories": {
+		"test": "test"
+	},
+	"scripts": {
+		"start": "NODE_ENV=production node src/app.js",
+		"dev": "NODE_ENV=development nodemon --exec \"make format && node\" src/app.js",
+		"test": "NODE_ENV=test jest --verbose --silent --detectOpenHandles",
+		"format": "prettier --write '**/*.{js,json,md}'"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ValentinoCarmonaS/API-CRUD.git"
+	},
+	"keywords": [
+		"api",
+		"rest",
+		"crud",
+		"nodejs",
+		"express",
+		"mvc",
+		"backend",
+		"javascript",
+		"docker",
+		"testing",
+		"jest",
+		"supertest",
+		"modular",
+		"scalable",
+		"freelance"
+	],
+	"author": "Valentino Carmona",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/ValentinoCarmonaS/API-CRUD/issues"
+	},
+	"homepage": "https://github.com/ValentinoCarmonaS/API-CRUD#readme",
+	"devDependencies": {
+		"jest": "^29.7.0",
+		"nodemon": "^3.1.9",
+		"prettier": "^3.3.3",
+		"supertest": "^7.1.0"
+	},
+	"dependencies": {
+		"bcrypt": "^5.1.1",
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.7",
+		"express": "^5.1.0",
+		"express-validator": "^7.2.1",
+		"jsonwebtoken": "^9.0.2",
+		"mongoose": "^8.13.2"
+	},
+	"prettier": {
+		"semi": true,
+		"singleQuote": true,
+		"tabWidth": 8,
+		"useTabs": true,
+		"printWidth": 80,
+		"bracketSpacing": true,
+		"trailingComma": "none",
+		"arrowParens": "avoid",
+		"proseWrap": "always"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	}
+}

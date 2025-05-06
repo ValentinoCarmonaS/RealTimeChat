@@ -1,0 +1,15 @@
+# Ignorar carpeta coverage generada por Jest
+
+coverage/
+
+# Ignorar node_modules
+
+node_modules/
+
+# Ignorar archivos de compilación o generados
+
+dist/ build/
+
+# Ignorar archivos de configuración generados
+
+package-lock.json
