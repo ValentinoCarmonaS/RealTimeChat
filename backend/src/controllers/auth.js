@@ -37,8 +37,7 @@ const loginUser = async (req, res, next) => {
 		// Generate a token
 		const token = jwt.sign(
 			{
-				id: user._id,
-				role: user.role
+				id: user._id
 			},
 			process.env.JWT_SECRET,
 			{ expiresIn: '1h' }
@@ -52,8 +51,7 @@ const loginUser = async (req, res, next) => {
 				user: {
 					id: user._id,
 					name: user.name,
-					email: user.email,
-					role: user.role
+					email: user.email
 				}
 			}
 		});
@@ -80,7 +78,7 @@ const registerUser = async (req, res, next) => {
 			password
 		});
 		const token = jwt.sign(
-			{ id: user._id, role: user.role },
+			{ id: user._id },
 			process.env.JWT_SECRET,
 			{ expiresIn: '1h' }
 		);
@@ -92,8 +90,7 @@ const registerUser = async (req, res, next) => {
 				user: {
 					id: user._id,
 					name,
-					email,
-					role: user.role
+					email
 				}
 			}
 		});

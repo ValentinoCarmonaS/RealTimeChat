@@ -34,10 +34,6 @@ const validateUserInfo = [
 		.withMessage('Password must be at least 6 characters long')
 		.matches(/[0-9]/)
 		.withMessage('Password must contain at least one number'),
-	body('role')
-		.optional()
-		.isIn(['user', 'admin'])
-		.withMessage('Role must be either user or admin'),
 
 	// Handle validation results
 	(req, res, next) => {

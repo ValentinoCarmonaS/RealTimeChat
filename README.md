@@ -3,7 +3,10 @@
 ![Build Status](https://github.com/ValentinoCarmonaS/RealTimeChat/actions/workflows/ci.yml/badge.svg)
 [![Codecov](https://codecov.io/gh/ValentinoCarmonaS/RealTimeChat/branch/main/graph/badge.svg)](https://codecov.io/gh/ValentinoCarmonaS/RealTimeChat)
 
-A **real-time chat application** built with **Node.js**, **Express**, **Socket.IO**, and **MongoDB**, enabling multiple users to send and receive messages instantly in a shared chat room. It implements the **MVC** pattern, featuring a minimal frontend, persistent message storage, and easy deployment.
+A **real-time chat application** built with **Node.js**, **Express**,
+**Socket.IO**, and **MongoDB**, enabling multiple users to send and receive
+messages instantly in a shared chat room. It implements the **MVC** pattern,
+featuring a minimal frontend, persistent message storage, and easy deployment.
 
 ## 🚀 Features
 
@@ -11,7 +14,8 @@ A **real-time chat application** built with **Node.js**, **Express**, **Socket.I
 - **Persistence**: Store messages in MongoDB for chat history.
 - **Notifications**: Alerts for user connections and disconnections.
 - **Minimal Interface**: Simple frontend with HTML, CSS, and JavaScript.
-- **Testing**: Comprehensive automated tests with Jest and Supertest (93.75% branch coverage).
+- **Testing**: Comprehensive automated tests with Jest and Supertest (93.75%
+  branch coverage).
 - **Docker**: Containerized setup for easy deployment.
 
 ## 📋 Prerequisites
@@ -80,14 +84,16 @@ Or run tests with npm:
 npm test
 ```
 
-- Tests cover user connections, message sending and storage, and WebSocket event logic.
+- Tests cover user connections, message sending and storage, and WebSocket event
+  logic.
 - Coverage: 93.75% branches, 98.64% statements.
 - View detailed reports in `coverage/lcov-report/index.html`.
 
 ## 📚 Main Functionalities
 
 - **User Connection**: Users enter a username and join a shared chat room.
-- **Messages**: Messages are sent in real-time, stored in MongoDB, and displayed with the sender’s username.
+- **Messages**: Messages are sent in real-time, stored in MongoDB, and displayed
+  with the sender’s username.
 - **History**: Retrieve historical messages when a new user connects.
 - **Notifications**: Alerts when a user connects or disconnects.
 
