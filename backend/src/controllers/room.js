@@ -1,27 +1,33 @@
-const Room = require('../models/room');
+const { messagesModel, roomsModel } = require('../models/index');
 
 /**
  * Create a new room
- * @param {Object} req - The request object
- * @param {Object} res - The response object
+ * @param {Object} req
+ * @param {Object} res 
+ * @param {Function} next 
  */
 const createRoom = async (req, res, next) => {
 	try {
-		const name = req.body;
+		const { name } = req.body;
 		const userId = req.user._id;
 
-		// Chech if the room already exists
-		const existingRoom = await Room.findOne({ name: name });
-		if (existingRoom) {
+		if (!name || typeof name !== 'string' || name.trim() === '') {
 			return res.status(400).json({
 				success: false,
-				message: 'Room already exists',
-				error: new Error('Room already exists')
+				message: 'El nombre de la sala es requerido y debe ser un string'
 			});
 		}
 
-		const newRoom = new Room({
-			name: name,
+		const existingRoom = await roomsModel.findOne({ name });
+		if (existingRoom) {
+			return res.status(400).json({
+				success: false,
+				message: 'La sala ya existe'
+			});
+		}
+
+		const newRoom = new roomsModel({
+			name,
 			createdBy: userId
 		});
 
@@ -29,7 +35,7 @@ const createRoom = async (req, res, next) => {
 
 		res.status(201).json({
 			success: true,
-			message: 'Room created successfully',
+			message: 'Sala creada exitosamente',
 			room: newRoom
 		});
 	} catch (error) {
@@ -39,16 +45,17 @@ const createRoom = async (req, res, next) => {
 
 /**
  * Get all rooms
- * @param {Object} req - The request object
- * @param {Object} res - The response object
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Function} next
  */
 const getRooms = async (req, res, next) => {
 	try {
-		const rooms = await Room.find();
+		const rooms = await roomsModel.find();
 		res.status(200).json({
 			success: true,
-			message: 'Rooms fetched successfully',
-			rooms: rooms
+			message: 'Salas obtenidas exitosamente',
+			rooms
 		});
 	} catch (error) {
 		next(error);
@@ -57,28 +64,44 @@ const getRooms = async (req, res, next) => {
 
 /**
  * Delete a room
- * @param {Object} req - The request object
- * @param {Object} res - The response object
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Function} next 
  */
 const deleteRoom = async (req, res, next) => {
 	try {
 		const { id } = req.params;
-		const room = await Room.findByIdAndDelete(id);
+		const userId = req.user._id;
 
+		const room = await roomsModel.findById(id);
 		if (!room) {
 			return res.status(404).json({
 				success: false,
-				message: 'Room not found',
-				error: new Error('Room not found')
+				message: 'Sala no encontrada'
 			});
 		}
 
+		if (room.createdBy.toString() !== userId.toString()) {
+			return res.status(403).json({
+				success: false,
+				message: 'No tienes permiso para eliminar esta sala'
+			});
+		}
+
+		await roomsModel.findByIdAndDelete(id);
+		await messagesModel.deleteMany({ room: id }); 
+
 		res.status(200).json({
 			success: true,
-			message: 'Room deleted successfully',
-			room: room
+			message: 'Sala eliminada exitosamente'
 		});
 	} catch (error) {
 		next(error);
 	}
+};
+
+module.exports = {
+	createRoom,
+	getRooms,
+	deleteRoom
 };

@@ -4,7 +4,7 @@ const { usersModel } = require('../models/index');
 
 /**
  * Middleware to validate user update input
- * Ensures name, email, password, and role fields are valid if provided
+ * Ensures name, email, password and fields are valid if provided
  * Uses express-validator for validation
  * Returns 400 with error messages if validation fails
  * Calls next middleware if validation passes
@@ -83,7 +83,7 @@ const validateUserId = [
 
 /**
  * Middleware to validate user creation input
- * Ensures name, email, password, and role fields are valid
+ * Ensures name, email, password and fields are valid
  * Uses express-validator for validation
  * Returns 400 with error messages if validation fails
  * Calls next middleware if validation passes

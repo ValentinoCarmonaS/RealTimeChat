@@ -32,7 +32,7 @@ module.exports = io => {
 			io.to(socket.room).emit('message', {
 				username: newMessage.username,
 				message: newMessage.message,
-				date: newMessage.date
+				timestamp: newMessage.date
 			});
 		});
 

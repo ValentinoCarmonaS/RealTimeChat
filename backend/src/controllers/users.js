@@ -18,7 +18,6 @@ const createUser = async (req, res, next) => {
 				_id: data._id,
 				name: data.name,
 				email: data.email,
-				role: data.role
 			}
 		});
 	} catch (error) {
