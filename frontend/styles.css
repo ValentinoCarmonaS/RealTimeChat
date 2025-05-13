@@ -1,81 +1,154 @@
+/* frontend/styles.css */
 body {
-	font-family: Arial, sans-serif;
-	margin: 20px;
-	max-width: 600px;
-	margin: 20px auto;
+    font-family: Arial, sans-serif;
+    margin: 0; /* Eliminamos márgenes para usar toda la pantalla */
+    padding: 0;
+    height: 100vh; /* Aseguramos que el body ocupe toda la altura */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 h2 {
-	text-align: center;
+    text-align: center;
+    margin: 10px 0;
 }
 
 input, button {
-	padding: 8px;
-	margin: 5px;
-	width: 100%;
-	box-sizing: border-box;
+    padding: 8px;
+    margin: 5px;
+    box-sizing: border-box;
 }
 
 button {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #auth-section, #rooms-section, #chat-section {
-	border: 1px solid #ccc;
-	padding: 20px;
-	border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px; /* Mantener el ancho máximo */
+    background: #fff;
+}
+
+#chat-section {
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    display: flex;
+    flex-direction: column; /* Elementos apilados verticalmente */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0; /* Evita que el header se comprima */
+}
+
+.chat-header button {
+    background: #ccc;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+}
+
+.chat-header button:hover {
+    background: #aaa;
+}
+
+.messages {
+    flex-grow: 1; /* Ocupa el espacio disponible */
+    border: 1px solid #ccc;
+    overflow-y: auto; /* Scroll solo dentro del área de mensajes */
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+
+.chat-input {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; /* Evita que el input se comprima */
+}
+
+#message-input {
+    flex-grow: 1; /* El input ocupa el espacio disponible */
+    margin-right: 10px;
+}
+
+.chat-input button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+}
+
+.chat-input button:hover {
+    background: #45a049;
 }
 
 #login-form, #register-form, #new-room-form {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #rooms-list {
-	list-style: none;
-	padding: 0;
+    list-style: none;
+    padding: 0;
 }
 
 #rooms-list li {
-	padding: 10px;
-	border-bottom: 1px solid #eee;
-	cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #rooms-list li:hover {
-	background-color: #f0f0f0;
+    background-color: #f0f0f0;
 }
 
-#messages {
-	border: 1px solid #ccc;
-	height: 400px;
-	overflow-y: scroll;
-	padding: 10px;
-	margin: 10px 0;
+#rooms-list li button {
+    background: #ff4444;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#rooms-list li button:hover {
+    background: #cc0000;
 }
 
 .message {
-	margin: 5px 0;
-	padding: 8px;
-	border-radius: 8px;
-	max-width: 70%;
+    margin: 5px 0;
+    padding: 8px;
+    border-radius: 8px;
+    max-width: 70%;
 }
 
 .message.sent {
-	background-color: #d4f4d4;
-	margin-left: auto;
+    background-color: #d4f4d4;
+    margin-left: auto;
 }
 
 .message.received {
-	background-color: #f0f0f0;
-	margin-right: auto;
+    background-color: #f0f0f0;
+    margin-right: auto;
 }
 
 .message.notification {
-	color: gray;
-	font-style: italic;
-	text-align: center;
+    color: gray;
+    font-style: italic;
+    text-align: center;
 }
 
 #rooms-list li {

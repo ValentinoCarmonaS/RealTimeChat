@@ -1,5 +1,4 @@
-// frontend/script.js
-const socket = io({ auth: { token: localStorage.getItem('token') } });
+let socket = null;
 let currentName = '';
 let currentRoomId = '';
 
@@ -52,19 +51,24 @@ async function login() {
 	if (!email || !password) return alert('Completa todos los campos');
 
 	try {
-		const res = await fetch('http://localhost:3000/api/auth/login', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ email, password }),
-		});
-		const data = await res.json();
-		if (res.ok) {
-			localStorage.setItem('token', data.token);
-			currentName = data.name; // Asumimos que el backend devuelve el nombre
-			socket.auth.token = data.token;
+		const res = await fetch(
+			'http://localhost:3000/api/auth/login',
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ email, password })
+			}
+		);
+		const response = await res.json();
+		if (res.ok && response.success) {
+			const { token, user } = response.data;
+			localStorage.setItem('token', token);
+			currentName = user.name;
+
+			initSocket(token);
 			showRooms();
 		} else {
-			alert(data.error || 'Error al iniciar sesión');
+			alert(data.message || 'Error al iniciar sesión');
 		}
 	} catch (error) {
 		alert('Error de conexión');
@@ -74,46 +78,121 @@ async function login() {
 async function register() {
 	const name = document.getElementById('register-name').value.trim();
 	const email = document.getElementById('register-email').value.trim();
-	const password = document.getElementById('register-password').value.trim();
+	const password = document
+		.getElementById('register-password')
+		.value.trim();
 
-	if (!name || !email || !password) return alert('Completa todos los campos');
+	if (!name || !email || !password)
+		return alert('Completa todos los campos');
 
 	try {
-		const res = await fetch('http://localhost:3000/api/auth/register', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ name, email, password }),
-		});
+		const res = await fetch(
+			'http://localhost:3000/api/auth/register',
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ name, email, password })
+			}
+		);
 		const data = await res.json();
-		if (res.ok) {
-			localStorage.setItem('token', data.token);
-			currentName = name;
-			socket.auth.token = data.token;
+		if (res.ok && data.success) {
+			const { token, user } = response.data;
+			localStorage.setItem('token', token);
+			currentName = user.name;
+
+			initSocket(data.token);
 			showRooms();
 		} else {
-			alert(data.error || 'Error al registrarse');
+			alert(data.message || 'Error al registrarse');
 		}
 	} catch (error) {
 		alert('Error de conexión');
 	}
 }
 
+function initSocket(token) {
+	socket = io({
+		auth: { token }
+	});
+
+	socket.on('connect_error', err => {
+		console.error('Error de conexión de socket:', err.message);
+	});
+
+	socket.on('loadMessages', messages => {
+		const messagesDiv = document.getElementById('messages');
+		messages.forEach(msg => {
+			const div = document.createElement('div');
+			div.className = `message ${msg.username === currentName ? 'sent' : 'received'}`;
+			div.textContent = `${msg.username}: ${msg.message}`;
+			messagesDiv.appendChild(div);
+		});
+		messagesDiv.scrollTop = messagesDiv.scrollHeight;
+	});
+
+	socket.on('message', msg => {
+		const messagesDiv = document.getElementById('messages');
+		const div = document.createElement('div');
+		div.className = `message ${msg.username === currentName ? 'sent' : 'received'}`;
+		div.textContent = `${msg.username}: ${msg.message}`;
+		messagesDiv.appendChild(div);
+		messagesDiv.scrollTop = messagesDiv.scrollHeight;
+	});
+
+	socket.on('notification', msg => {
+		const messagesDiv = document.getElementById('messages');
+		const div = document.createElement('div');
+		div.className = 'message notification';
+		div.textContent = msg;
+		messagesDiv.appendChild(div);
+		messagesDiv.scrollTop = messagesDiv.scrollHeight;
+	});
+}
+
 async function fetchRooms() {
 	try {
-		const res = await fetch('http://localhost:3000/api/rooms', {
-			headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+		const token = localStorage.getItem('token');
+		if (!token) {
+			alert('No hay token, por favor inicia sesión');
+			showAuth();
+			return;
+		}
+
+		const res = await fetch('http://localhost:3000/api/room', {
+			headers: { Authorization: `Bearer ${token}` }
 		});
-		const rooms = await res.json();
-		const roomsList = document.getElementById('rooms-list');
-		roomsList.innerHTML = '';
-		rooms.forEach(room => {
-			const li = document.createElement('li');
-			li.textContent = room.name;
-			li.onclick = () => showChat(room._id, room.name);
-			roomsList.appendChild(li);
-		});
+		const data = await res.json();
+		if (res.ok && data.success) {
+			const rooms = data.rooms;
+			const roomsList = document.getElementById('rooms-list');
+			roomsList.innerHTML = '';
+			rooms.forEach(room => {
+				const li = document.createElement('li');
+				const span = document.createElement('span');
+				span.textContent = room.name;
+				span.onclick = () =>
+					showChat(room._id, room.name);
+				li.appendChild(span);
+				const decoded = JSON.parse(
+					atob(token.split('.')[1])
+				);
+				if (decoded.id === room.createdBy) {
+					const deleteBtn =
+						document.createElement(
+							'button'
+						);
+					deleteBtn.textContent = 'Eliminar';
+					deleteBtn.onclick = () =>
+						deleteRoom(room._id);
+					li.appendChild(deleteBtn);
+				}
+				roomsList.appendChild(li);
+			});
+		} else {
+			alert(data.message || 'Error al cargar salas');
+		}
 	} catch (error) {
-		alert('Error al cargar salas');
+		alert('Error de conexión al cargar salas: ' + error.message);
 	}
 }
 
@@ -122,21 +201,44 @@ async function createRoom() {
 	if (!name) return alert('Ingresa un nombre para la sala');
 
 	try {
-		const res = await fetch('http://localhost:3000/api/rooms', {
+		const res = await fetch('http://localhost:3000/api/room', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('token')}`,
+				Authorization: `Bearer ${localStorage.getItem('token')}`
 			},
-			body: JSON.stringify({ name }),
+			body: JSON.stringify({ name })
 		});
-		const room = await res.json();
-		if (res.ok) {
+		const data = await res.json();
+		if (res.ok && data.success) {
 			cancelNewRoom();
 			fetchRooms();
-			showChat(room._id, room.name);
+			showChat(data.room._id, data.room.name);
 		} else {
-			alert(room.error || 'Error al crear sala');
+			alert(data.message || 'Error al crear sala');
+		}
+	} catch (error) {
+		alert('Error de conexión');
+	}
+}
+
+async function deleteRoom(roomId) {
+	if (!confirm('¿Estás seguro de eliminar esta sala?')) return;
+	try {
+		const res = await fetch(
+			`http://localhost:3000/api/room/${roomId}`,
+			{
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem('token')}`
+				}
+			}
+		);
+		const data = await res.json();
+		if (res.ok && data.success) {
+			fetchRooms();
+		} else {
+			alert(data.message || 'Error al eliminar sala');
 		}
 	} catch (error) {
 		alert('Error de conexión');
@@ -155,54 +257,4 @@ function sendMessage() {
 		socket.emit('sendMessage', message);
 		document.getElementById('message-input').value = '';
 	}
-}
-
-socket.on('loadMessages', messages => {
-	const messagesDiv = document.getElementById('messages');
-	messages.forEach(msg => {
-		const div = document.createElement('div');
-		div.className = `message ${msg.username === currentName ? 'sent' : 'received'}`;
-		div.textContent = `${msg.username}: ${msg.message}`;
-		messagesDiv.appendChild(div);
-	});
-	messagesDiv.scrollTop = messagesDiv.scrollHeight;
-});
-
-socket.on('message', msg => {
-	const messagesDiv = document.getElementById('messages');
-	const div = document.createElement('div');
-	div.className = `message ${msg.username === currentName ? 'sent' : 'received'}`;
-	div.textContent = `${msg.username}: ${msg.message}`;
-	messagesDiv.appendChild(div);
-	messagesDiv.scrollTop = messagesDiv.scrollHeight;
-});
-
-socket.on('notification', msg => {
-	const messagesDiv = document.getElementById('messages');
-	const div = document.createElement('div');
-	div.className = 'message notification';
-	div.textContent = msg;
-	messagesDiv.appendChild(div);
-	messagesDiv.scrollTop = messagesDiv.scrollHeight;
-});
-
-// Verificar si hay token al cargar
-if (localStorage.getItem('token')) {
-	fetch('http://localhost:3000/api/auth/verify', {
-		headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-	})
-		.then(res => {
-			if (res.ok) return res.json();
-			throw new Error('Token inválido');
-		})
-		.then(data => {
-			currentName = data.name; // Asumimos que el backend devuelve el nombre
-			showRooms();
-		})
-		.catch(() => {
-			localStorage.removeItem('token');
-			showAuth();
-		});
-} else {
-	showAuth();
 }

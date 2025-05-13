@@ -11,15 +11,17 @@ const s = http.createServer(app);
 const io = new Server(s, {
 	cors: {
 		origin: 'http://localhost:3000',
-		methods: ['GET', 'POST'],
-	},
+		methods: ['GET', 'POST']
+	}
 });
 
 dbConnect();
 
-app.use(cors({
-	origin: 'http://localhost:3000',
-}));
+app.use(
+	cors({
+		origin: 'http://localhost:3000'
+	})
+);
 
 app.use(express.json());
 
