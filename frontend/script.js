@@ -59,16 +59,16 @@ async function login() {
 				body: JSON.stringify({ email, password })
 			}
 		);
-		const response = await res.json();
-		if (res.ok && response.success) {
-			const { token, user } = response.data;
+		const data = await res.json();
+		if (res.ok && data.success) {
+			const { token, user } = data.data;
 			localStorage.setItem('token', token);
 			currentName = user.name;
 
 			initSocket(token);
 			showRooms();
 		} else {
-			alert(data.message || 'Error al iniciar sesión');
+			alert(data.message);
 		}
 	} catch (error) {
 		alert('Error de conexión');
@@ -103,6 +103,15 @@ async function register() {
 			initSocket(data.token);
 			showRooms();
 		} else {
+			for (i = 0; i < data.errors.length; i++) {
+				if (data.errors[i].path === 'email') {
+					alert(data.errors[i].msg);
+					return;
+				} else if (data.errors[i].path === 'name') {
+					alert('The name is too long');
+					return;
+				}
+			}
 			alert(data.message || 'Error al registrarse');
 		}
 	} catch (error) {
@@ -110,43 +119,57 @@ async function register() {
 	}
 }
 
+// frontend/script.js (solo la función initSocket actualizada)
 function initSocket(token) {
-	socket = io({
-		auth: { token }
-	});
+    socket = io({
+        auth: { token }
+    });
 
-	socket.on('connect_error', err => {
-		console.error('Error de conexión de socket:', err.message);
-	});
+    socket.on('connect_error', err => {
+        console.error('Error de conexión de socket:', err.message);
+    });
 
-	socket.on('loadMessages', messages => {
-		const messagesDiv = document.getElementById('messages');
-		messages.forEach(msg => {
-			const div = document.createElement('div');
-			div.className = `message ${msg.username === currentName ? 'sent' : 'received'}`;
-			div.textContent = `${msg.username}: ${msg.message}`;
-			messagesDiv.appendChild(div);
-		});
-		messagesDiv.scrollTop = messagesDiv.scrollHeight;
-	});
+    socket.on('loadMessages', messages => {
+        const messagesDiv = document.getElementById('messages');
+        messagesDiv.innerHTML = ''; // Limpiar mensajes existentes
+        messages.forEach(msg => {
+            const div = document.createElement('div');
+            div.className = `message ${msg.username === currentName ? 'sent' : 'received'}`;
+            div.textContent = `${msg.username}: ${msg.message}`;
+            messagesDiv.appendChild(div);
+        });
+        messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll al final al cargar
+    });
 
-	socket.on('message', msg => {
-		const messagesDiv = document.getElementById('messages');
-		const div = document.createElement('div');
-		div.className = `message ${msg.username === currentName ? 'sent' : 'received'}`;
-		div.textContent = `${msg.username}: ${msg.message}`;
-		messagesDiv.appendChild(div);
-		messagesDiv.scrollTop = messagesDiv.scrollHeight;
-	});
+    socket.on('message', msg => {
+        const messagesDiv = document.getElementById('messages');
+        const div = document.createElement('div');
+        div.className = `message ${msg.username === currentName ? 'sent' : 'received'}`;
+        div.textContent = `${msg.username}: ${msg.message}`;
+        messagesDiv.appendChild(div);
+        // Scroll suave solo si el usuario está cerca del final
+        requestAnimationFrame(() => {
+            const isNearBottom = messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight < 100;
+            if (isNearBottom) {
+                messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
+            }
+        });
+    });
 
-	socket.on('notification', msg => {
-		const messagesDiv = document.getElementById('messages');
-		const div = document.createElement('div');
-		div.className = 'message notification';
-		div.textContent = msg;
-		messagesDiv.appendChild(div);
-		messagesDiv.scrollTop = messagesDiv.scrollHeight;
-	});
+    socket.on('notification', msg => {
+        const messagesDiv = document.getElementById('messages');
+        const div = document.createElement('div');
+        div.className = 'message notification';
+        div.textContent = msg;
+        messagesDiv.appendChild(div);
+        // Scroll suave solo si el usuario está cerca del final
+        requestAnimationFrame(() => {
+            const isNearBottom = messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight < 100;
+            if (isNearBottom) {
+                messagesDiv.scrollTo({ top: messagesDiv.scrollHeight, behavior: 'smooth' });
+            }
+        });
+    });
 }
 
 async function fetchRooms() {
@@ -257,4 +280,61 @@ function sendMessage() {
 		socket.emit('sendMessage', message);
 		document.getElementById('message-input').value = '';
 	}
+}
+
+if (localStorage.getItem('token')) {
+	const token = localStorage.getItem('token');
+	console.log('Token al cargar página:', token);
+	try {
+		// Decodificar el token para obtener el nombre del usuario
+		const decoded = JSON.parse(atob(token.split('.')[1]));
+		currentName = decoded.name || localStorage.getItem('currentName') || '';
+		if (!currentName) {
+			throw new Error('Nombre de usuario no encontrado en el token');
+		}
+		// Verificar token con GET /api/room
+		fetch('http://localhost:3000/api/room', {
+			headers: { Authorization: `Bearer ${token}` }
+		})
+			.then(res => {
+				if (res.ok) return res.json();
+				throw new Error('Token inválido');
+			})
+			.then(data => {
+				console.log('Respuesta GET /api/room:', data);
+				if (data.success) {
+					localStorage.setItem('currentName', currentName); // Persistir nombre
+					initSocket(token);
+					// Restaurar sala si existe
+					const savedRoomId = localStorage.getItem('currentRoomId');
+					const savedRoomName = localStorage.getItem('currentRoomName');
+					if (savedRoomId && savedRoomName) {
+						showChat(savedRoomId, savedRoomName);
+					} else {
+						showRooms();
+					}
+				} else {
+					throw new Error(data.message || 'Error al verificar token');
+				}
+			})
+			.catch(error => {
+				console.error('Error al verificar token:', error);
+				localStorage.removeItem('token');
+				localStorage.removeItem('currentName');
+				localStorage.removeItem('currentRoomId');
+				localStorage.removeItem('currentRoomName');
+				alert(error.message || 'Sesión inválida, por favor inicia sesión');
+				showAuth();
+			});
+	} catch (error) {
+		console.error('Error al decodificar token:', error);
+		localStorage.removeItem('token');
+		localStorage.removeItem('currentName');
+		localStorage.removeItem('currentRoomId');
+		localStorage.removeItem('currentRoomName');
+		alert('Token corrupto, por favor inicia sesión');
+		showAuth();
+	}
+} else {
+	showAuth();
 }

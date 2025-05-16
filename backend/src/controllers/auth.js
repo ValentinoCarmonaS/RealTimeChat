@@ -37,7 +37,8 @@ const loginUser = async (req, res, next) => {
 		// Generate a token
 		const token = jwt.sign(
 			{
-				id: user._id
+				id: user._id,
+				name: user.name
 			},
 			process.env.JWT_SECRET,
 			{ expiresIn: '1h' }
@@ -78,7 +79,10 @@ const registerUser = async (req, res, next) => {
 			password
 		});
 		const token = jwt.sign(
-			{ id: user._id },
+			{
+				id: user._id,
+				name: user.name
+			},
 			process.env.JWT_SECRET,
 			{ expiresIn: '1h' }
 		);
