@@ -1,7 +1,7 @@
 // backend/src/routes/room.js
 const express = require('express');
 const router = express.Router();
-const { createRoom, getRooms, deleteRoom } = require('../controllers/room');
+const { createRoom, getRooms, deleteRoom } = require('../controllers/roomController');
 const { authenticate } = require('../middlewares/auth');
 
 // All http://localhost:3000/api/room GET, POST, DELETE

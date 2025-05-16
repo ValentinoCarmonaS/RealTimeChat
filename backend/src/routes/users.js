@@ -12,7 +12,7 @@ const {
 	readUser,
 	updateUser,
 	deleteUser
-} = require('../controllers/users');
+} = require('../controllers/usersController');
 
 // ALL http://localhost:3000/api/users GET, POST, PUT, DELETE
 
