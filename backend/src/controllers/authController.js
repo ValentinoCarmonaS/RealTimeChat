@@ -17,9 +17,7 @@ const loginUser = async (req, res, next) => {
 		if (!user) {
 			return res.status(401).json({
 				success: false,
-				message: 'Invalid email or password',
-				error: new Error('Invalid email or password')
-					.message
+				message: 'Invalid email or password'
 			});
 		}
 
@@ -28,9 +26,7 @@ const loginUser = async (req, res, next) => {
 		if (!isMatch) {
 			return res.status(401).json({
 				success: false,
-				message: 'Invalid email or password',
-				error: new Error('Invalid email or password')
-					.message
+				message: 'Invalid email or password'
 			});
 		}
 

@@ -37,7 +37,7 @@ const readUsers = async (req, res, next) => {
 		res.status(200).json({
 			success: true,
 			message: 'Users fetched successfully',
-			users
+			data: users
 		}); // Return the list of users
 	} catch (error) {
 		next(error); // Pass the error to the next middleware
@@ -60,15 +60,14 @@ const readUser = async (req, res, next) => {
 		if (!user) {
 			return res.status(404).json({
 				success: false,
-				message: 'User not found',
-				error: new Error('User not found').message
+				message: 'User not found'
 			});
 		}
 
 		res.status(200).json({
 			success: true,
 			message: 'User fetched successfully',
-			user
+			data: user
 		}); // Return the user data
 	} catch (error) {
 		next(error); // Pass the error to the next middleware
@@ -95,15 +94,14 @@ const updateUser = async (req, res, next) => {
 		if (!user) {
 			return res.status(404).json({
 				success: false,
-				message: 'User not found',
-				error: new Error('User not found').message
+				message: 'User not found'
 			});
 		}
 
 		res.status(200).json({
 			success: true,
 			message: 'User updated successfully',
-			user
+			data: user
 		}); // Return the updated user data
 	} catch (error) {
 		next(error); // Pass the error to the next middleware
@@ -126,8 +124,7 @@ const deleteUser = async (req, res, next) => {
 		if (!user) {
 			return res.status(404).json({
 				success: false,
-				message: 'User not found',
-				error: new Error('User not found').message
+				message: 'User not found'
 			});
 		}
 
@@ -135,7 +132,7 @@ const deleteUser = async (req, res, next) => {
 		res.status(200).json({
 			success: true,
 			message: 'User deleted successfully',
-			user
+			data: user
 		});
 	} catch (error) {
 		next(error); // Pass the error to the next middleware

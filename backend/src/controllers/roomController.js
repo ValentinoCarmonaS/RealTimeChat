@@ -11,32 +11,15 @@ const createRoom = async (req, res, next) => {
 		const { name } = req.body;
 		const userId = req.user.id;
 
-		if (!name || typeof name !== 'string' || name.trim() === '') {
-			return res.status(400).json({
-				success: false,
-				message: 'El nombre de la sala es requerido y debe ser un string'
-			});
-		}
-
-		const existingRoom = await roomsModel.findOne({ name });
-		if (existingRoom) {
-			return res.status(400).json({
-				success: false,
-				message: 'La sala ya existe'
-			});
-		}
-
-		const newRoom = new roomsModel({
+		const newRoom = await roomsModel.create({
 			name,
 			createdBy: userId
 		});
 
-		await newRoom.save();
-
 		res.status(201).json({
 			success: true,
-			message: 'Sala creada exitosamente',
-			room: newRoom
+			message: 'Room created successfully',
+			data: newRoom
 		});
 	} catch (error) {
 		next(error);
@@ -54,8 +37,8 @@ const getRooms = async (req, res, next) => {
 		const rooms = await roomsModel.find();
 		res.status(200).json({
 			success: true,
-			message: 'Salas obtenidas exitosamente',
-			rooms
+			message: 'Rooms fetched successfully',
+			data: rooms
 		});
 	} catch (error) {
 		next(error);
@@ -77,14 +60,7 @@ const deleteRoom = async (req, res, next) => {
 		if (!room) {
 			return res.status(404).json({
 				success: false,
-				message: 'Sala no encontrada'
-			});
-		}
-
-		if (room.createdBy.toString() !== userId.toString()) {
-			return res.status(403).json({
-				success: false,
-				message: 'No tienes permiso para eliminar esta sala'
+				message: 'Room not found'
 			});
 		}
 
@@ -93,7 +69,8 @@ const deleteRoom = async (req, res, next) => {
 
 		res.status(200).json({
 			success: true,
-			message: 'Sala eliminada exitosamente'
+			message: 'Room deleted successfully',
+			data: null
 		});
 	} catch (error) {
 		next(error);

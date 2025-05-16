@@ -17,10 +17,7 @@ const authenticate = async (req, res, next) => {
 		if (!authHeader || !authHeader.startsWith('Bearer ')) {
 			return res.status(401).json({
 				success: false,
-				message: 'Authentication token required',
-				error: new Error(
-					'Authentication token required'
-				).message
+				message: 'Authentication token required'
 			});
 		}
 
@@ -33,8 +30,7 @@ const authenticate = async (req, res, next) => {
 	} catch (error) {
 		return res.status(401).json({
 			success: false,
-			message: 'Invalid or expired token',
-			error: error.message
+			message: 'Invalid or expired token'
 		});
 	}
 };
