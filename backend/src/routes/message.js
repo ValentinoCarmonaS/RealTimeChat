@@ -22,3 +22,5 @@ router.post(
 	validateMessage,
 	createMessage
 );
+
+module.exports = router;

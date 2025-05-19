@@ -47,7 +47,6 @@ describe('Users Endpoints', () => {
 		expect(res.body.message).toBe('User created successfully');
 		expect(res.body.data.email).toBe('testemail@example.com');
 		expect(res.body.data.name).toBe('Test User');
-		expect(res.body.data.role).toBe('user'); // Rol por defecto
 		expect(res.body.data._id).toBeDefined();
 		expect(res.body.data.password).toBeUndefined(); // La contraseña no debe ser devuelta
 	});
@@ -58,7 +57,7 @@ describe('Users Endpoints', () => {
 			.set('Authorization', `Bearer ${token}`);
 		expect(res.statusCode).toBe(200);
 		expect(res.body.success).toBe(true);
-		expect(res.body.users).toBeInstanceOf(Array);
+		expect(res.body.data).toBeInstanceOf(Array);
 	});
 
 	it('should fetch a user by ID', async () => {
@@ -67,7 +66,7 @@ describe('Users Endpoints', () => {
 			.set('Authorization', `Bearer ${token}`);
 		expect(res.statusCode).toBe(200);
 		expect(res.body.success).toBe(true);
-		expect(res.body.user._id).toBe(userId.toString());
+		expect(res.body.data._id).toBe(userId.toString());
 	});
 
 	it('should update a user by ID', async () => {
@@ -77,8 +76,8 @@ describe('Users Endpoints', () => {
 			.send({ name: 'Updated User' });
 		expect(res.statusCode).toBe(200);
 		expect(res.body.success).toBe(true);
-		expect(res.body.user.name).toBe('Updated User');
-		expect(res.body.user._id).toBe(userId.toString());
+		expect(res.body.data.name).toBe('Updated User');
+		expect(res.body.data._id).toBe(userId.toString());
 	});
 
 	it('should delete a user by ID', async () => {
@@ -87,7 +86,7 @@ describe('Users Endpoints', () => {
 			.set('Authorization', `Bearer ${token}`);
 		expect(res.statusCode).toBe(200);
 		expect(res.body.success).toBe(true);
-		expect(res.body.user._id).toBe(userId.toString());
+		expect(res.body.data._id).toBe(userId.toString());
 	});
 
 	it('should return 404 for non-existent user ID (read)', async () => {

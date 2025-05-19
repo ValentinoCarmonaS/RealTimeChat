@@ -3,3 +3,6 @@ coverage/
 .git/
 .env
 frontend/
+.gitignore
+npm-debug.log
+Makefile

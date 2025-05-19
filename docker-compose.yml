@@ -4,7 +4,7 @@ services:
   api:
     container_name: chat-api
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     working_dir: /usr/src/app
     # Mapear el puerto de la máquina host al contenedor
@@ -19,14 +19,11 @@ services:
     # Reiniciar a menos que se pare manualmente
     restart: unless-stopped
 
-# Se puede agregar un servicio de Mongo local si se desea usar en lugar de Atlas:
-#  mongo:
-#    image: mongo:6.0
-#    container_name: mongo
-#    ports:
-#      - "27017:27017"
-#    volumes:
-#      - mongo_data:/data/db
-#
-#volumes:
-#  mongo_data:
+  frontend:
+    container_name: chat-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    restart: unless-stopped

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const dbConnect = require('../config/mongo');
-const { server } = require('../app');
+const { s } = require('../app');
 
 beforeAll(async () => {
 	// Connect to the database before running tests
@@ -16,5 +16,5 @@ afterAll(async () => {
 	await mongoose.connection.dropDatabase(); // Limpia toda la base de datos
 	// Close the connection to the database
 	await mongoose.connection.close();
-	await server.close(); // Cierra el servidor
+	await s.close(); // Cierra el servidor
 });

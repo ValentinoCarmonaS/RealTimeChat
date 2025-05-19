@@ -7,8 +7,8 @@
 		"test": "backend/src/tests"
 	},
 	"scripts": {
-		"start": "NODE_ENV=production node backend/src/app.js",
-		"dev": "NODE_ENV=development nodemon backend/src/app.js",
+		"start": "NODE_ENV=production node backend/server.js",
+		"dev": "NODE_ENV=development nodemon backend/server.js",
 		"test": "NODE_ENV=test jest --verbose --silent --detectOpenHandles",
 		"format": "prettier --write '**/*.{js,json,md}'"
 	},

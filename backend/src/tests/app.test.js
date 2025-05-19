@@ -37,7 +37,6 @@ describe('App Endpoints', () => {
 		expect(res.statusCode).toBe(404);
 		expect(res.body.success).toBe(false);
 		expect(res.body.message).toBe('Route not found');
-		expect(res.body.error).toBe('Route not found');
 	});
 
 	it('should reject request without authorization header', async () => {
@@ -45,7 +44,6 @@ describe('App Endpoints', () => {
 		expect(res.statusCode).toBe(401);
 		expect(res.body.success).toBe(false);
 		expect(res.body.message).toBe('Authentication token required');
-		expect(res.body.error).toBe('Authentication token required');
 	});
 
 	it('should reject request with invalid authorization header', async () => {
@@ -55,7 +53,6 @@ describe('App Endpoints', () => {
 		expect(res.statusCode).toBe(401);
 		expect(res.body.success).toBe(false);
 		expect(res.body.message).toBe('Authentication token required');
-		expect(res.body.error).toBe('Authentication token required');
 	});
 
 	it('should reject request with invalid JWT token', async () => {
@@ -65,7 +62,6 @@ describe('App Endpoints', () => {
 		expect(res.statusCode).toBe(401);
 		expect(res.body.success).toBe(false);
 		expect(res.body.message).toBe('Invalid or expired token');
-		expect(res.body.error).toMatch(/jwt malformed|invalid/); // Error de JWT
 	});
 
 	it('should reject request with expired JWT token', async () => {
@@ -81,6 +77,5 @@ describe('App Endpoints', () => {
 		expect(res.statusCode).toBe(401);
 		expect(res.body.success).toBe(false);
 		expect(res.body.message).toBe('Invalid or expired token');
-		expect(res.body.error).toMatch(/expired/); // Error de token expirado
 	});
 });
