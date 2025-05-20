@@ -106,7 +106,7 @@ All users see: "Ana: Hello, how are you?" (stored in MongoDB)
 Ana disconnects, all users see: "Ana has disconnected"
 ```
 
-For more details, refer to the [technical specification](docs/spec.md).
+For more details, refer to the [technical specification](docs/statement.md).
 
 ## 🗂️ Project Structure
 
