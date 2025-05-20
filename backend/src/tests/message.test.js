@@ -7,7 +7,6 @@ const message = require('../models/nosql/message');
 describe('Message Endpoints', () => {
 	let token;
 	let userId;
-	let username;
 	let roomId;
 	const messageContent = 'Hello, this is a test message';
 
@@ -21,7 +20,6 @@ describe('Message Endpoints', () => {
 			password: 'password123'
 		});
 		userId = user._id;
-		username = user.name;
 		token = jwt.sign(
 			{
 				id: user._id,
@@ -66,4 +64,82 @@ describe('Message Endpoints', () => {
 		expect(res.body.data.room).toBe(roomId.toString());
 		expect(res.body.data.user).toBe(userId.toString());
 	});
+
+	it('should fetch messages from a room', async () => {
+		await messagesModel.create({
+			room: roomId,
+			user: userId,
+			message: messageContent
+		});
+
+		const res = await request(app)
+			.get('/api/message')
+			.set('Authorization', `Bearer ${token}`)
+			.send({ room: roomId });
+
+		expect(res.statusCode).toBe(200);
+		expect(res.body.success).toBe(true);
+		expect(res.body.message).toBe('Messages fetched successfully');
+		expect(res.body.data.length).toBe(1);
+		expect(res.body.data[0].message).toBe(messageContent);
+		expect(res.body.data[0].room).toBe(roomId.toString());
+		expect(res.body.data[0].user).toBe(userId.toString());
+	});
+
+	it('should return 400 if roomId is not provided', async () => {
+		const res = await request(app)
+			.get('/api/message')
+			.set('Authorization', `Bearer ${token}`)
+			.send({});
+
+		expect(res.statusCode).toBe(400);
+		expect(res.body.success).toBe(false);
+		expect(res.body.message).toBe('Validation error');
+		expect(res.body.errors[0].msg).toBe('roomId is required');
+	});
+
+	it('should return 400 if userId is not provided', async () => {
+		const res = await request(app)
+			.post('/api/message')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				room: roomId,
+				message: messageContent
+			});
+
+		expect(res.statusCode).toBe(400);
+		expect(res.body.success).toBe(false);
+		expect(res.body.message).toBe('Validation error');
+		expect(res.body.errors[0].msg).toBe('userId is required');
+	});
+
+	it('should return 400 if message is not provided', async () => {
+		const res = await request(app)
+			.post('/api/message')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				room: roomId,
+				user: userId
+			});
+
+		expect(res.statusCode).toBe(400);
+		expect(res.body.success).toBe(false);
+		expect(res.body.message).toBe('Validation error');
+		expect(res.body.errors[0].msg).toBe('message is required');
+	});
+
+	it('should return 401 if token is not provided', async () => {
+		const res = await request(app)
+			.post('/api/message')
+			.send({
+				room: roomId,
+				user: userId,
+				message: messageContent
+			});
+
+		expect(res.statusCode).toBe(401);
+		expect(res.body.success).toBe(false);
+		expect(res.body.message).toBe('Authentication token required');
+	});
+	
 });

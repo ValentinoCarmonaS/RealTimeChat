@@ -8,10 +8,10 @@ const { messagesModel } = require('../models/index');
  */
 const getMessages = async (req, res, next) => {
 	try {
-		const { roomId, limit } = req.query;
+		const { room, limit } = req.body;
 
 		const messages = await messagesModel
-			.find({ roomId })
+			.find({ room })
 			.sort({ timestamp: -1 })
 			.limit(limit ? parseInt(limit) : 50);
 
