@@ -84,9 +84,6 @@ Or run tests with npm:
 npm test
 ```
 
-- Tests cover user connections, message sending and storage, and WebSocket event
-  logic.
-- Coverage: 93.75% branches, 98.64% statements.
 - View detailed reports in `coverage/lcov-report/index.html`.
 
 ## 📚 Main Functionalities
@@ -121,11 +118,8 @@ RealTimeChat/
 │   │   ├── routes/         # HTTP routes for frontend and auxiliary endpoints
 │   │   ├── sockets/        # WebSocket-specific logic
 │   │   ├── tests/          # Unit and integration tests
-│   │   └── app.js          # Express application setup
-├── frontend/
-│   ├── index.html          # Main interface
-│   ├── styles.css          # Basic styles
-│   └── script.js           # Frontend logic
+│   │   ├── app.js          # Express application setup
+│   │   └── server.js       # Server init file
 ├── .env                    # Environment variables
 ├── Dockerfile              # Docker configuration
 ├── docker-compose.yml      # Docker Compose setup
