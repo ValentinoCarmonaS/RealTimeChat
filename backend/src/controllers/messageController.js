@@ -10,8 +10,6 @@ const getMessages = async (req, res, next) => {
 	try {
 		const { roomId, limit } = req.query;
 
-		// Validate roomId
-
 		const messages = await messagesModel
 			.find({ roomId })
 			.sort({ timestamp: -1 })
@@ -35,16 +33,12 @@ const getMessages = async (req, res, next) => {
  */
 const createMessage = async (req, res, next) => {
 	try {
-		const { roomId, userId, message } = req.body;
-
-		// Validate roomId
-		// Validate userId
-		// Validate message
+		const { user, message, room } = req.body;
 
 		const newMessage = await messagesModel.create({
-			roomId,
-			userId,
-			message
+			user,
+			message,
+			room
 		});
 
 		res.status(201).json({

@@ -1,8 +1,8 @@
 const { param, body, validationResult } = require('express-validator');
 const { messagesModel } = require('../models/index');
 
-const validateRoomId = [
-	param('roomId')
+const validateRoom = [
+	body('room')
 		.exists()
 		.withMessage('roomId is required')
 		.isMongoId()
@@ -21,8 +21,8 @@ const validateRoomId = [
 	}
 ];
 
-const validateUserId = [
-	body('userId')
+const validateUser = [
+	body('user')
 		.exists()
 		.withMessage('userId is required')
 		.isMongoId()
@@ -64,7 +64,7 @@ const validateMessage = [
 ];
 
 module.exports = {
-	validateRoomId,
-	validateUserId,
+	validateRoom,
+	validateUser,
 	validateMessage
 };

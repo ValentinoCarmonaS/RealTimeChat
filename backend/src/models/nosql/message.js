@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema({
-	username: {
-		type: String,
+	user: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User',
 		required: true
 	},
 	message: {
@@ -12,7 +13,7 @@ const messageSchema = new mongoose.Schema({
 	room: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Room',
-		default: null // Null para mensajes en una sala general
+		required: true
 	},
 	timestamp: {
 		type: Date,

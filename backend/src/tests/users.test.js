@@ -16,7 +16,7 @@ describe('Users Endpoints', () => {
 		});
 		userId = user._id;
 		token = jwt.sign(
-			{ id: user._id, role: user.role },
+			{ id: user._id, name: user.name },
 			process.env.JWT_SECRET,
 			{ expiresIn: '1h' }
 		);

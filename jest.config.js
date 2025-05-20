@@ -6,13 +6,13 @@ module.exports = {
 	testTimeout: 10000,
 
 	// Archivos de setup que se ejecutan después de configurar el entorno
-	setupFilesAfterEnv: ['./src/tests/setup.js'],
+	setupFilesAfterEnv: ['./backend/src/tests/setup.js'],
 
 	// Ignorar la carpeta node_modules
 	testPathIgnorePatterns: ['/node_modules/'],
 
 	// Patrones para encontrar archivos de prueba
-	testMatch: ['<rootDir>/src/tests/**/*.test.js'],
+	testMatch: ['<rootDir>/backend/src/tests/**/*.test.js'],
 
 	// Extensiones de archivos que Jest debe reconocer
 	moduleFileExtensions: ['js', 'json'],
@@ -33,8 +33,7 @@ module.exports = {
 	coveragePathIgnorePatterns: [
 		'/node_modules/',
 		'/backend/src/tests/setup.js',
-		'/backend/src/config/',
-		'/frontend/'
+		'/backend/src/config/'
 	],
 
 	// Umbral mínimo de cobertura (opcional, ajusta según tus necesidades)

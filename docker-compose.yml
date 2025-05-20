@@ -4,7 +4,7 @@ services:
   api:
     container_name: chat-api
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
     working_dir: /usr/src/app
     # Mapear el puerto de la máquina host al contenedor
@@ -18,12 +18,3 @@ services:
       - NODE_ENV=${NODE_ENV}
     # Reiniciar a menos que se pare manualmente
     restart: unless-stopped
-
-  # frontend:
-  #   container_name: chat-frontend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "4000:4000"
-  #   restart: unless-stopped

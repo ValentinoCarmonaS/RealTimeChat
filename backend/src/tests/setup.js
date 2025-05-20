@@ -13,8 +13,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+	await s.close(); // Cierra el servidor
 	await mongoose.connection.dropDatabase(); // Limpia toda la base de datos
 	// Close the connection to the database
 	await mongoose.connection.close();
-	await s.close(); // Cierra el servidor
 });
