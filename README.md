@@ -94,6 +94,44 @@ npm test
 - **History**: Retrieve historical messages when a new user connects.
 - **Notifications**: Alerts when a user connects or disconnects.
 
+## 📡 API Endpoints
+
+The following RESTful endpoints are available under the `/api` base path. All endpoints require a valid JWT token via the `Authorization Bearer` header unless otherwise noted.
+
+### 🔐 Authentication
+
+| Method | Endpoint             | Description         | Auth |
+| ------ | -------------------- | ------------------- | ---- |
+| POST   | `/api/auth/login`    | Authenticate user   | ❌    |
+| POST   | `/api/auth/register` | Register a new user | ❌    |
+
+### 👤 Users
+
+| Method | Endpoint         | Description                     | Auth |
+| ------ | ---------------- | ------------------------------- | ---- |
+| GET    | `/api/users`     | Get all users                   | ✅    |
+| GET    | `/api/users/:id` | Get a user by ID                | ✅    |
+| POST   | `/api/users`     | Create a new user               | ✅    |
+| PUT    | `/api/users/:id` | Update a user by ID             | ✅    |
+| DELETE | `/api/users/:id` | Delete a user by ID             | ✅    |
+
+### 🧩 Rooms
+
+| Method | Endpoint        | Description         | Auth |
+| ------ | --------------- | ------------------- | ---- |
+| GET    | `/api/room`     | Get all rooms       | ✅    |
+| POST   | `/api/room`     | Create a new room   | ✅    |
+| DELETE | `/api/room/:id` | Delete a room by ID | ✅    |
+
+### 💬 Messages
+
+| Method | Endpoint                             | Description                                 | Auth |
+| ------ | ------------------------------------ | ------------------------------------------- | ---- |
+| GET    | `/api/message?roomId=<id>&limit=<#>` | Get messages for a room (requires `roomId`) | ✅    |
+| POST   | `/api/message`                       | Create a new message                        | ✅    |
+
+> **Note**: Use the `roomId` query parameter to fetch messages for a specific room. The `limit` parameter is optional to control the number of returned messages.
+
 ### Example Interaction
 
 ```
