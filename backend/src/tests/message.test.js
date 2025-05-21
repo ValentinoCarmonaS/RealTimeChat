@@ -73,9 +73,8 @@ describe('Message Endpoints', () => {
 		});
 
 		const res = await request(app)
-			.get('/api/message')
+			.get(`/api/message?room=${roomId}`)
 			.set('Authorization', `Bearer ${token}`)
-			.send({ room: roomId });
 
 		expect(res.statusCode).toBe(200);
 		expect(res.body.success).toBe(true);
@@ -90,12 +89,22 @@ describe('Message Endpoints', () => {
 		const res = await request(app)
 			.get('/api/message')
 			.set('Authorization', `Bearer ${token}`)
-			.send({});
+			.query({});
 
 		expect(res.statusCode).toBe(400);
 		expect(res.body.success).toBe(false);
 		expect(res.body.message).toBe('Validation error');
 		expect(res.body.errors[0].msg).toBe('roomId is required');
+	});
+
+	it('should return 401 if token is not provided on GET', async () => {
+		const res = await request(app)
+			.get('/api/message')
+			.query({ room: roomId });
+		
+		expect(res.statusCode).toBe(401);
+		expect(res.body.success).toBe(false);
+		expect(res.body.message).toBe('Authentication token required');
 	});
 
 	it('should return 400 if userId is not provided', async () => {
@@ -127,8 +136,8 @@ describe('Message Endpoints', () => {
 		expect(res.body.message).toBe('Validation error');
 		expect(res.body.errors[0].msg).toBe('message is required');
 	});
-
-	it('should return 401 if token is not provided', async () => {
+	
+	it('should return 401 if token is not provided on POST', async () => {
 		const res = await request(app)
 			.post('/api/message')
 			.send({

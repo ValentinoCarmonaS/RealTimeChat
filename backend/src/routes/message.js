@@ -5,21 +5,18 @@ const {
 	createMessage
 } = require('../controllers/messageController');
 const {
-	validateRoom,
-	validateUser,
-	validateMessage
+	validateCreateMessage,
+	validateGetMessage
 } = require('../middlewares/validateMessage');
 const { authenticate } = require('../middlewares/auth');
 
 // All http://localhost:3000/api/message GET, POST
 
-router.get('/', authenticate, validateRoom, getMessages);
+router.get('/', authenticate, validateGetMessage, getMessages);
 router.post(
 	'/',
 	authenticate,
-	validateRoom,
-	validateUser,
-	validateMessage,
+	validateCreateMessage,
 	createMessage
 );
 

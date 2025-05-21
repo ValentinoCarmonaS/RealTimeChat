@@ -8,8 +8,8 @@ const { messagesModel } = require('../models/index');
  */
 const getMessages = async (req, res, next) => {
 	try {
-		const { room, limit } = req.body;
-
+		const { room, limit } = req.query;
+		
 		const messages = await messagesModel
 			.find({ room })
 			.sort({ timestamp: -1 })
