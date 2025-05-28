@@ -1,10 +1,48 @@
 const { messagesModel, roomsModel } = require('../models/index');
 
 /**
- * Create a new room
- * @param {Object} req
- * @param {Object} res
- * @param {Function} next
+ * @swagger
+ * /api/room:
+ *   post:
+ *     summary: Create a new room
+ *     tags: [Rooms]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: General Chat
+ *     responses:
+ *       201:
+ *         description: Room created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     createdBy:
+ *                       type: string
+ *       401:
+ *         description: Unauthorized
  */
 const createRoom = async (req, res, next) => {
 	try {
@@ -27,10 +65,38 @@ const createRoom = async (req, res, next) => {
 };
 
 /**
- * Get all rooms
- * @param {Object} req
- * @param {Object} res
- * @param {Function} next
+ * @swagger
+ * /api/room:
+ *   get:
+ *     summary: Get all rooms
+ *     tags: [Rooms]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Rooms fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       createdBy:
+ *                         type: string
+ *       401:
+ *         description: Unauthorized
  */
 const getRooms = async (req, res, next) => {
 	try {
@@ -46,10 +112,39 @@ const getRooms = async (req, res, next) => {
 };
 
 /**
- * Delete a room
- * @param {Object} req
- * @param {Object} res
- * @param {Function} next
+ * @swagger
+ * /api/room/{id}:
+ *   delete:
+ *     summary: Delete a room by ID
+ *     tags: [Rooms]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the room to delete
+ *         example: 60c7b2f9e4b0c12345678909
+ *     responses:
+ *       200:
+ *         description: Room deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Room not found
  */
 const deleteRoom = async (req, res, next) => {
 	try {

@@ -1,10 +1,58 @@
 const { usersModel } = require('../models/index');
 
 /**
- * Create a new user
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: Create a new user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized
  */
 const createUser = async (req, res, next) => {
 	try {
@@ -26,10 +74,38 @@ const createUser = async (req, res, next) => {
 };
 
 /**
- * Read all users
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Get all users
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Users fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       email:
+ *                         type: string
+ *       401:
+ *         description: Unauthorized
  */
 const readUsers = async (req, res, next) => {
 	try {
@@ -45,10 +121,46 @@ const readUsers = async (req, res, next) => {
 };
 
 /**
- * Read a user by ID
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @swagger
+ * /api/users/{id}:
+ *   get:
+ *     summary: Get a user by ID
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the user
+ *         example: 60c7b2f9e4b0c12345678908
+ *     responses:
+ *       200:
+ *         description: User fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
  */
 const readUser = async (req, res, next) => {
 	try {
@@ -75,10 +187,62 @@ const readUser = async (req, res, next) => {
 };
 
 /**
- * Update a user by ID
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @swagger
+ * /api/users/{id}:
+ *   put:
+ *     summary: Update a user by ID
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the user to update
+ *         example: 60c7b2f9e4b0c12345678908
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Jane Doe
+ *               email:
+ *                 type: string
+ *                 example: jane@example.com
+ *               password:
+ *                 type: string
+ *                 example: newpassword123
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
  */
 const updateUser = async (req, res, next) => {
 	try {
@@ -109,10 +273,46 @@ const updateUser = async (req, res, next) => {
 };
 
 /**
- * Delete a user by ID
- * @param {*} req
- * @param {*} res
- * @param {*} next
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Delete a user by ID
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the user to delete
+ *         example: 60c7b2f9e4b0c12345678908
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
  */
 const deleteUser = async (req, res, next) => {
 	try {

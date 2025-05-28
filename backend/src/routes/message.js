@@ -13,11 +13,6 @@ const { authenticate } = require('../middlewares/auth');
 // All http://localhost:3000/api/message GET, POST
 
 router.get('/', authenticate, validateGetMessage, getMessages);
-router.post(
-	'/',
-	authenticate,
-	validateCreateMessage,
-	createMessage
-);
+router.post('/', authenticate, validateCreateMessage, createMessage);
 
 module.exports = router;

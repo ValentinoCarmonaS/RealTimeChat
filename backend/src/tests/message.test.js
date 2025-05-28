@@ -74,7 +74,7 @@ describe('Message Endpoints', () => {
 
 		const res = await request(app)
 			.get(`/api/message?room=${roomId}`)
-			.set('Authorization', `Bearer ${token}`)
+			.set('Authorization', `Bearer ${token}`);
 
 		expect(res.statusCode).toBe(200);
 		expect(res.body.success).toBe(true);
@@ -101,7 +101,7 @@ describe('Message Endpoints', () => {
 		const res = await request(app)
 			.get('/api/message')
 			.query({ room: roomId });
-		
+
 		expect(res.statusCode).toBe(401);
 		expect(res.body.success).toBe(false);
 		expect(res.body.message).toBe('Authentication token required');
@@ -136,19 +136,16 @@ describe('Message Endpoints', () => {
 		expect(res.body.message).toBe('Validation error');
 		expect(res.body.errors[0].msg).toBe('message is required');
 	});
-	
+
 	it('should return 401 if token is not provided on POST', async () => {
-		const res = await request(app)
-			.post('/api/message')
-			.send({
-				room: roomId,
-				user: userId,
-				message: messageContent
-			});
+		const res = await request(app).post('/api/message').send({
+			room: roomId,
+			user: userId,
+			message: messageContent
+		});
 
 		expect(res.statusCode).toBe(401);
 		expect(res.body.success).toBe(false);
 		expect(res.body.message).toBe('Authentication token required');
 	});
-	
 });
