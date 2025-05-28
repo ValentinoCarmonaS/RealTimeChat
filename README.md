@@ -148,6 +148,19 @@ Ana disconnects, all users see: "Ana has disconnected"
 
 For more details, refer to the [technical specification](docs/statement.md).
 
+## 📚 API Documentation
+
+The API is documented using **Swagger (OpenAPI)**. Access the interactive documentation at: 
+```bash
+http://localhost:3000/api-docs 
+```
+or in production at:
+```bash
+https://realtimechat-59t7.onrender.com/api-docs
+```
+
+Explore endpoints, test requests, and view response examples directly in the Swagger UI.
+
 ## 🗂️ Project Structure
 
 ```
