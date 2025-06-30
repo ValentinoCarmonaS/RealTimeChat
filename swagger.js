@@ -15,11 +15,7 @@ const swaggerOptions = {
 		},
 		servers: [
 			{
-				url: 'http://localhost:3000/api',
-				description: 'Development server'
-			},
-			{
-				url: 'https://realtimechat-59t7.onrender.com/api',
+				url: process.env.FRONTEND_URL,
 				description: 'Production server'
 			}
 		],
